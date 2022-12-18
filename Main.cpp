@@ -3,7 +3,7 @@
 #include <string>
 #include <vector>
 using namespace std;
-#include "Matrix.cpp"
+#include "Matrix.hpp"
 
 int main(){
     try{
