@@ -90,6 +90,7 @@ class Matrix{
     }
     Matrix<T> operator+(Matrix a) {return addMatrix(*this,a);}
     Matrix<T> operator*(Matrix a) {return multiplyMatrix(*this,a);}
+    Matrix<T> operator-(Matrix a) {return subtractMatrix(*this,a);}
     Matrix<T> operator*(T n) {return multiplyMatrix(*this,n);}
     Matrix<T> operator+(T n) {return addMatrix(*this,n);}
     Matrix<T> operator-(T n) {return subtractMatrix(*this,n);}
@@ -185,6 +186,7 @@ Matrix<T> addMatrix(const Matrix<T> a,const Matrix<T> b){
     int channels=a.data.size();
     size_t bcols=b.data.at(0).totalData->col;
     for(int c=0;c<channels;c++){
+        if(b.data.at(c).totalData->data==nullptr) throw("This matrix is empty");
         for(size_t i=0;i<a.rows;i++){
             for(size_t j=0;j<a.cols;j++){
                 result.data.at(c).totalData->data[i*a.cols+j]+=b.data.at(c).totalData->data[(i+b.drow)*bcols+j+b.dcol];
@@ -249,6 +251,7 @@ Matrix<T> subtractMatrix(const Matrix<T> a,const Matrix<T> b){
     int channels=a.data.size();
     size_t bcols=b.data.at(0).totalData->col;
     for(int c=0;c<channels;c++){
+        if(b.data.at(c).totalData->data==nullptr) throw("This matrix is empty");
         for(size_t i=0;i<a.rows;i++){
             for(size_t j=0;j<a.cols;j++){
                 result.data.at(c).totalData->data[i*a.cols+j]-=b.data.at(c).totalData->data[(i+b.drow)*bcols+j+b.dcol];
@@ -292,6 +295,7 @@ Matrix<T> transposeMatrix(const Matrix<T> a){
     size_t totalcols=a.data.at(0).totalData->col;
     Matrix<T> result(cols,rows,channels);
     for(int ch=0;ch<channels;ch++){
+        if(a.data.at(ch).totalData->data==nullptr) throw("This matrix is empty");
         T* p1=&a.data.at(ch).totalData->data[a.dcol+totalcols*a.drow];
         T* p2=&result.data.at(ch).totalData->data[0];
         for(size_t i=0;i<rows;i++){
